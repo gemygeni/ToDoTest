@@ -10,7 +10,7 @@ import UIKit
 class ToDoViewController: UITableViewController {
 
     var itemArray : [String] = ["save movie", "read book", "take lunch"]
-    let addingText : UITextField
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -38,8 +38,23 @@ class ToDoViewController: UITableViewController {
     }
     
     
-    
-    
-    
+    @IBAction func addItemPressed(_ sender: UIBarButtonItem) {
+        var addingTextField = UITextField()
+        let alert = UIAlertController(title: "add new Item", message: "", preferredStyle: .alert)
+      
+        let action = UIAlertAction(title: "Add", style: .default) { _ in
+            
+            self.itemArray.append(addingTextField.text ?? "new Item")
+            self.tableView.reloadData()
+        }
+        
+        alert.addTextField { textField in
+            textField.placeholder = "add new item"
+            addingTextField = textField
+        }
+        alert.addAction(action)
+        present(alert, animated: true)
+        
+    }
 }
 
