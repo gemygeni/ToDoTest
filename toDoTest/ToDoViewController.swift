@@ -21,7 +21,7 @@ class ToDoViewController: UITableViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-       // loadData()
+        loadData()
     }
     // tableview dataSource methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -83,9 +83,10 @@ class ToDoViewController: UITableViewController {
         do{
 //            let data = try Data(contentsOf: fileDirectory)
 //            itemArray = try decoder.decode([Item].self, from: data)
+            let request : NSFetchRequest<Item>  = Item.fetchRequest()
+           try self.itemArray = context.fetch(request)
         }catch {
             print(error.localizedDescription)
-            
         }
        
 
