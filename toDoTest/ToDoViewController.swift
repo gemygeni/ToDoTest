@@ -41,6 +41,15 @@ class ToDoViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
      }
     
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+                    context.delete(itemArray[indexPath.row])
+                    itemArray.remove(at: indexPath.row)
+                    saveData()
+
+        }
+    }
+    
     
     @IBAction func addItemPressed(_ sender: UIBarButtonItem) {
         var addingTextField = UITextField()
@@ -66,7 +75,6 @@ class ToDoViewController: UITableViewController {
     
     func saveData(){
         
-        
 //        let encoder = JSONEncoder()
         do {
 //            let data =  try encoder.encode(self.itemArray)
@@ -79,7 +87,7 @@ class ToDoViewController: UITableViewController {
     }
     
     func loadData(){
-        let decoder = JSONDecoder()
+  //      let decoder = JSONDecoder()
         do{
 //            let data = try Data(contentsOf: fileDirectory)
 //            itemArray = try decoder.decode([Item].self, from: data)
