@@ -6,20 +6,22 @@
 //
 
 import UIKit
+import CoreData
 
 class ToDoViewController: UITableViewController {
 
     var itemArray : [Item] = []
-    let defaults = UserDefaults.standard
-    
-    let fileDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "items")
-
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//    let defaults = UserDefaults.standard
+//
+//    let fileDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appending(path: "items")
+//
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        loadData()
+       // loadData()
     }
     // tableview dataSource methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -45,7 +47,10 @@ class ToDoViewController: UITableViewController {
         let alert = UIAlertController(title: "add new Item", message: "", preferredStyle: .alert)
       
         let action = UIAlertAction(title: "Add", style: .default) { _ in
-            let newItem = Item(title: addingTextField.text ?? "new Item")
+            
+            let newItem = Item(context: self.context)
+            newItem.title = addingTextField.text
+            newItem.done = false
             self.itemArray.append(newItem)
             self.saveData()
         }
@@ -62,10 +67,11 @@ class ToDoViewController: UITableViewController {
     func saveData(){
         
         
-        let encoder = JSONEncoder()
+//        let encoder = JSONEncoder()
         do {
-            let data =  try encoder.encode(self.itemArray)
-            try data.write(to: fileDirectory)
+//            let data =  try encoder.encode(self.itemArray)
+//            try data.write(to: fileDirectory)
+            try context.save()
         }catch{
             print(error.localizedDescription)
         }
@@ -75,8 +81,8 @@ class ToDoViewController: UITableViewController {
     func loadData(){
         let decoder = JSONDecoder()
         do{
-            let data = try Data(contentsOf: fileDirectory)
-            itemArray = try decoder.decode([Item].self, from: data)
+//            let data = try Data(contentsOf: fileDirectory)
+//            itemArray = try decoder.decode([Item].self, from: data)
         }catch {
             print(error.localizedDescription)
             
